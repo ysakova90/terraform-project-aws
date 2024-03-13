@@ -4,3 +4,8 @@ variable cidr_block {
     default = ""
   
 }
+variable "region" {
+  description = "Please provide a region"
+  type        = string
+  default     = ""
+}
