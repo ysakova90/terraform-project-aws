@@ -46,6 +46,6 @@ resource "aws_eip" "main" {
 }  
  resource "aws_nat_gateway" "natgw" {
   allocation_id = "aws_eip.main.id"
-  subnet_id     = aws_subnet.main.id
+  subnet_id     = aws_subnet.puclic_subnet.id
   tags   = var.tags
 }
