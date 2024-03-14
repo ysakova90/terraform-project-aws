@@ -40,7 +40,7 @@ resource "aws_internet_gateway" "gw" {
   vpc_id     = aws_vpc.main.id
   tags       = var.tags
 }
-resource "aws_eip" "main" {
+resource "aws_eip" "nat_gateway_eip" {
   domain   = "vpc"  
   tags     = var.tags
 }  
