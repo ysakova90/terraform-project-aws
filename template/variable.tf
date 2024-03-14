@@ -1,5 +1,15 @@
+variable "region" {
+  description = "Please provide a region"
+  type        = string
+  default     = ""
+}
 variable "cidr_block" {
   description = "Please provide a cidr block"
+  type        = string
+  default     = ""
+}
+variable "instance_tenancy" {
+  description = "please provide instance_tenancy information"
   type        = string
   default     = ""
 }
