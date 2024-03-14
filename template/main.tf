@@ -36,3 +36,6 @@ resource "aws_subnet" "private_subnet3" {
   cidr_block = var.private_subnet3
   tags       = var.tags
 }
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
+}
