@@ -46,6 +46,5 @@ resource "aws_eip" "main" {
 }  
  resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public1.id
-  depends_on = [aws_internet_gateway.gw]
   tags   = var.tags
 }
