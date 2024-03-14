@@ -40,8 +40,8 @@ resource "aws_internet_gateway" "gw" {
   vpc_id     = aws_vpc.main.id
   tags       = var.tags
 }
-resource "aws_nat_gateway" "example" {
-  allocation_id = aws_eip.example.id
-  subnet_id     = aws_subnet.example.id
+resource "aws_nat_gateway" "main" {
+  allocation_id = aws_eip.main.id
+  subnet_id     = aws_subnet.main.id
   tags          = var.tags
 }
