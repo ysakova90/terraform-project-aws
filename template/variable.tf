@@ -3,11 +3,6 @@ variable "cidr_block" {
   type        = string
   default     = ""
 }
-variable "instance_tenancy" {
-  description = "please provide instance_tenancy information"
-  type        = string
-  default     = ""
-}
 variable "tags" {
   description = "Please specify tags"
   type        = map(any)
