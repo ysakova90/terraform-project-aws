@@ -37,5 +37,11 @@ resource "aws_subnet" "private_subnet3" {
   tags       = var.tags
 }
 resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.main.id
+  vpc_id     = aws_vpc.main.id
+  tags       = var.tags
+}
+resource "aws_nat_gateway" "example" {
+  allocation_id = aws_eip.example.id
+  subnet_id     = aws_subnet.example.id
+  tags          = var.tags
 }
