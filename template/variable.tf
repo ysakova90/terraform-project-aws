@@ -1,0 +1,50 @@
+variable "region" {
+  description = "Please provide a region"
+  type        = string
+  default     = ""
+}
+variable "cidr_block" {
+  description = "Please provide a cidr block"
+  type        = string
+  default     = ""
+}
+variable "instance_tenancy" {
+  description = "please provide instance_tenancy information"
+  type        = string
+  default     = ""
+}
+variable "tags" {
+  description = "Please specify tags"
+  type        = map(any)
+  default     = {}
+}
+variable "private_subnet1" {
+  description = "Please provide cidr block for private_subnet1"
+  type        = string
+  default     = ""
+}
+variable "private_subnet2" {
+  description = "Please provide cidr block for private_subnet2"
+  type        = string
+  default     = ""
+}
+variable "private_subnet3" {
+  description = "Please provide cidr block for private_subnet3"
+  type        = string
+  default     = ""
+}
+variable "public_subnet1" {
+  description = "Please provide cidr block for public_subnet1"
+  type        = string
+  default     = ""
+}
+variable "public_subnet2" {
+  description = "Please provide cidr block for public_subnet2"
+  type        = string
+  default     = ""
+}
+variable "public_subnet3" {
+  description = "Please provide cidr block for public_subnet3"
+  type        = string
+  default     = ""
+}
