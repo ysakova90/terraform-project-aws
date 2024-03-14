@@ -1,4 +1,4 @@
 resource "aws_vpc" "main" {
-  cidr_block       = var.cidr_block   #string variable
+  cidr_block       = "10.0.0.0/16"   #string variable
 }
 
