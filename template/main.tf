@@ -44,8 +44,8 @@ resource "aws_eip" "main" {
   domain   = "vpc"
   tags     = var.tags
 }  
- resource "aws_nat_gateway" "example" {
-  allocation_id = "aws_eip.example.id"
-  subnet_id     = aws_subnet.example.id
+ resource "aws_nat_gateway" "natgw" {
+  allocation_id = "aws_eip.main.id"
+  subnet_id     = aws_subnet.main.id
   tags   = var.tags
 }
