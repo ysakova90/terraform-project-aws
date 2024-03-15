@@ -4,7 +4,7 @@ locals {
    account_id = data.aws_caller_identity.current.account_id
 }
 
-ata "terraform_remote_state" "backend" {
+data "terraform_remote_state" "backend" {
   backend = "s3"
   config = {
     bucket = "tfstate-${local.account_id}"
