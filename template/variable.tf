@@ -49,7 +49,7 @@ variable "private_subnet3" {
   default     = ""
 }
 resource "aws_internet_gateway" "gw" {
- vpc_id = aws_vpc.Project.id
+ vpc_id = aws_vpc.main.id
 } 
 # Attach Internet Gateway to Public Subnets
 resource "aws_route_table" "public_subnet_rt" {
