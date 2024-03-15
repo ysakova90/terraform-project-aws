@@ -48,10 +48,6 @@ variable "private_subnet3" {
   type        = string
   default     = ""
 }
-resource "aws_internet_gateway" "gw" {
- vpc_id = aws_vpc.main.id
- 
-}
 # Attach Internet Gateway to Public Subnets
 resource "aws_route_table" "public_subnet_rt" {
   vpc_id = aws_vpc.main.id
