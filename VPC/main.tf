@@ -81,7 +81,7 @@ resource "aws_route_table_association" "public3" {
   route_table_id = aws_route_table.private_route_table.id
  }
  resource "aws_eip" "nat" {
-  vpc      = true
+  domain      = "vpc"
  }
 
 resource "aws_nat_gateway" "example" {
