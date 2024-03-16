@@ -2,7 +2,7 @@ variable "region" {
   description = "Please provide a region name"
   type        = string
 }
-variable "subnet_ids" {
+variable "private_subnet_ids" {
   type = list(string)
 }
 variable "tags" {
