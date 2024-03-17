@@ -7,7 +7,7 @@ locals {
 
 data "terraform_remote_state" "backend" {
   backend = "s3"
-  config {
+   config  = {
     bucket = "team1-aws-storage"
     key = "path/to/my/tfstate"
     region = "us-east-1"
