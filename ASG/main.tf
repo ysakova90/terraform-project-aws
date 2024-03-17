@@ -2,7 +2,7 @@ resource "aws_security_group" "ec2-sg" {
   name        = "project-team1"
   description = "Allow SSH , HTTP and HTTPS inbound  from Frontend app"
   vpc_id      = aws_vpc.main.id
-
+}
   ingress {
     description = "TLS from VPC"
     from_port   = 443
