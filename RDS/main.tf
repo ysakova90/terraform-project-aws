@@ -1,12 +1,12 @@
-data "terraform_remote_state" "vpc" {
-  backend = "local"
-
-  config = {
+data "terraform_remote_state" "remote" {
+  backend = "s3"
+  config {
     bucket = "team1-aws-storage"
-    key    = ""path/to/my/tfstate""
+    key = "path/to/my/tfstate"
     region = "us-east-1"
   }
 }
+
 
 
 resource "aws_db_subnet_group" "RDS_subnet_grp" {
