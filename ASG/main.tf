@@ -32,8 +32,8 @@ resource "aws_security_group" "ec2-sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = 
+    tags = var.tags
+  
 
 resource "aws_launch_template" "server" {
   name                   = "project-asg"
