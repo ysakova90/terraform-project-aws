@@ -3,6 +3,7 @@ resource "aws_security_group" "ec2-sg" {
   description = "Allow SSH , HTTP and HTTPS inbound  from Frontend app"
   vpc_id      = aws_vpc.main.id
 }
+
   ingress {
     description = "TLS from VPC"
     from_port   = 443
@@ -10,6 +11,7 @@ resource "aws_security_group" "ec2-sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     description = "TLS from VPC"
     from_port   = 22
