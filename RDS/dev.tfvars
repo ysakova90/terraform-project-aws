@@ -1,4 +1,4 @@
-
+region ="us-east-1"
 
 tags = {
   Name      = "Terraform-project"
