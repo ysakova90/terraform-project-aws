@@ -49,4 +49,11 @@ variable "instance_class" {
   default     = ""
   description = "Please provide a value"
 }
-
+variable "domain_name" {
+  description = "Please provide a domain name"
+  type        = string
+}
+variable "zone_id" {
+  description = "Please provide a domain name"
+  type        = string
+}
