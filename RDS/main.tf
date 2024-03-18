@@ -37,3 +37,14 @@ resource "aws_security_group" "RDS_allow_rule" {
 
   tags = var.tags
 }
+
+resource "random_string" "rds_password" {
+  length  = 16
+  special = false
+}
+
+resource "aws_ssm_parameter" "dbpass" {
+  name  = var.database_name
+  type  = "SecureString"
+  value = random_string.rds_password.result
+}

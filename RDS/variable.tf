@@ -8,3 +8,8 @@ variable "tags" {
   type        = map(any)
   default     = {}
 }
+variable "database_name" {
+  type        = string
+  default     = ""
+  description = "Please provide DB name"
+}
