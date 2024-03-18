@@ -13,3 +13,44 @@ variable "database_name" {
   default     = ""
   description = "Please provide DB name"
 }
+variable "master_username" {
+  type        = string
+  default     = ""
+  description = "Please provide DB name"
+}
+
+
+variable "number_of_instances" {
+  type        = string
+  default     = ""
+  description = "Please provide a domain"
+}
+
+variable "cluster_engine" {
+  type        = string
+  default     = ""
+  description = "Please provide a value"
+}
+
+variable "engine" {
+  type        = string
+  default     = ""
+  description = "Please provide a value"
+}
+
+variable "engine_version" {
+  type        = string
+  default     = ""
+  description = "Please provide a value"
+}
+
+variable "instance_class" {
+  type        = string
+  default     = ""
+  description = "Please provide a value"
+}
+
+variable "domain_name" {
+  description = "Please provide a domain name"
+  type        = string
+}

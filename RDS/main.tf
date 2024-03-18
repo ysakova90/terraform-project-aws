@@ -48,3 +48,20 @@ resource "aws_ssm_parameter" "dbpass" {
   type  = "SecureString"
   value = random_string.rds_password.result
 }
+resource "aws_rds_cluster" "wordpress_db_cluster" {
+  cluster_identifier   = "wordpress-cluster"
+  allocated_storage    = 20
+  engine               = var.engine
+  engine_version       = var.engine_version
+  enable_http_endpoint = true
+
+  database_name   = var.database_name
+  master_username = var.master_username
+  master_password = random_string.rds_password.result
+
+  skip_final_snapshot     = true
+  db_subnet_group_name    = aws_db_subnet_group.RDS_subnet_grp.id
+  vpc_security_group_ids  = ["${aws_security_group.RDS_allow_rule.id}"]
+  backup_retention_period = 5
+  storage_encrypted       = true
+}
