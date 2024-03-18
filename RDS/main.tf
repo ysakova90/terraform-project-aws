@@ -65,3 +65,24 @@ resource "aws_rds_cluster" "wordpress_db_cluster" {
   backup_retention_period = 5
   storage_encrypted       = true
 }
+resource "aws_rds_cluster_instance" "wordpress_cluster_instance_writer" {
+  apply_immediately  = true
+  cluster_identifier = aws_rds_cluster.wordpress_db_cluster.id
+  identifier         = "wordpress-cluster-instance-writer"
+  instance_class     = var.instance_class
+  engine             = aws_rds_cluster.wordpress_db_cluster.engine
+  engine_version     = aws_rds_cluster.wordpress_db_cluster.engine_version
+
+  depends_on = [aws_rds_cluster.wordpress_db_cluster]
+}
+resource "aws_rds_cluster_instance" "wordpress_cluster_instance_readers" {
+  count              = var.number_of_instances #3
+  apply_immediately  = true
+  cluster_identifier = aws_rds_cluster.wordpress_db_cluster.id
+  identifier         = "wordpress-cluster-instance-reader${format(count.index + 1)}"
+  instance_class     = var.instance_class
+  engine             = aws_rds_cluster.wordpress_db_cluster.engine
+  engine_version     = aws_rds_cluster.wordpress_db_cluster.engine_version
+
+  depends_on = [aws_rds_cluster_instance.wordpress_cluster_instance_writer]
+}
