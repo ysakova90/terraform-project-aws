@@ -76,7 +76,7 @@ resource "aws_rds_cluster_instance" "wordpress_cluster_instance_writer" {
   depends_on = [aws_rds_cluster.wordpress_db_cluster]
 }
 resource "aws_rds_cluster_instance" "wordpress_cluster_instance_readers" {
-  count              = var.number_of_instances #3
+  count              = var.number_of_instances 
   apply_immediately  = true
   cluster_identifier = aws_rds_cluster.wordpress_db_cluster.id
   identifier         = "wordpress-cluster-instance-reader${format(count.index + 1)}"
