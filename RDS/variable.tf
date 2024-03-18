@@ -50,7 +50,3 @@ variable "instance_class" {
   description = "Please provide a value"
 }
 
-variable "domain_name" {
-  description = "Please provide a domain name"
-  type        = string
-}

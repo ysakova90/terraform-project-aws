@@ -50,10 +50,10 @@ resource "aws_ssm_parameter" "dbpass" {
 }
 resource "aws_rds_cluster" "wordpress_db_cluster" {
   cluster_identifier   = "wordpress-cluster"
-  allocated_storage    = 20
   engine               = var.engine
   engine_version       = var.engine_version
-  enable_http_endpoint = true
+  
+
 
   database_name   = var.database_name
   master_username = var.master_username
