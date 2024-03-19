@@ -74,13 +74,7 @@ resource "aws_rds_cluster_instance" "wordpress_cluster_instance_readers" {
 
   depends_on = [aws_rds_cluster_instance.wordpress_cluster_instance_writer]
 }
-resource "aws_route53_record" "wordpress" {
-  zone_id = var.zone_id
-  name    = "wordpress.${var.domain_name}"
-  type    = "CNAME"
-  ttl     = 300
-  records        = ["aws_alb.application-lb.dns_name"]
-}
+
 resource "aws_route53_record" "writer_endpoit" {
   zone_id = var.zone_id
   name    = "writer.${var.domain_name}"

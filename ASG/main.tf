@@ -86,7 +86,7 @@ module "asg" {
   launch_template_name        = "project-asg"
   launch_template_description = "Launch template example"
   update_default_version      = true
-  user_data                   = base64encode(data.template_file.user_data.rendered)
+  user_data                   = filebase64("user_data.sh")
   image_id        = data.aws_ami.amazon.id
   instance_type     = "t3.micro"
   ebs_optimized     = false
