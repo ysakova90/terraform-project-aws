@@ -19,6 +19,12 @@ variable "master_username" {
   description = "Please provide DB name"
 }
 
+variable "master_password" {
+  type        = string
+  default     = ""
+  description = "Please provide DB name"
+}
+
 
 variable "number_of_instances" {
   type        = string

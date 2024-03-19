@@ -7,33 +7,39 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "public_subnet1" {
   vpc_id     = aws_vpc.main.id
   cidr_block = var.public_subnet1
+  availability_zone = var.az1
   tags       = var.tags
 }  
 resource "aws_subnet" "public_subnet2" {
   vpc_id     = aws_vpc.main.id
   cidr_block = var.public_subnet2
+  availability_zone = var.az2
   tags       = var.tags
 }  
 resource "aws_subnet" "public_subnet3" {
   vpc_id     = aws_vpc.main.id
   cidr_block = var.public_subnet3
+  availability_zone = var.az3
   tags       = var.tags
 }  
 resource "aws_subnet" "private_subnet1" {
   vpc_id     = aws_vpc.main.id
   cidr_block = var.private_subnet1
+  availability_zone = var.az1
   tags       = var.tags
 }  
 
 resource "aws_subnet" "private_subnet2" {
   vpc_id     = aws_vpc.main.id
   cidr_block = var.private_subnet2
+  availability_zone = var.az2
   tags       = var.tags
 }
 
 resource "aws_subnet" "private_subnet3" {
   vpc_id     = aws_vpc.main.id
   cidr_block = var.private_subnet3
+  availability_zone = var.az3
   tags       = var.tags
 }
 resource "aws_internet_gateway" "gw" {

@@ -38,29 +38,17 @@ resource "aws_security_group" "RDS_allow_rule" {
   tags = var.tags
 }
 
-resource "random_string" "rds_password" {
-  length  = 16
-  special = false
-}
-
-resource "aws_ssm_parameter" "dbpass" {
-  name  = var.database_name
-  type  = "SecureString"
-  value = random_string.rds_password.result
-}
 resource "aws_rds_cluster" "wordpress_db_cluster" {
   cluster_identifier   = "wordpress-cluster"
   engine               = var.engine
   engine_version       = var.engine_version
-  
-
-
   database_name   = var.database_name
   master_username = var.master_username
-  master_password = random_string.rds_password.result
+  #master_password = random_string.rds_password.result
+  master_password        = var.master_password
 
   skip_final_snapshot     = true
-  db_subnet_group_name    = aws_db_subnet_group.RDS_subnet_grp.id
+  db_subnet_group_name    = aws_db_subnet_group.RDS_subnet_grp.name
   vpc_security_group_ids  = ["${aws_security_group.RDS_allow_rule.id}"]
   backup_retention_period = 5
   storage_encrypted       = true
@@ -100,7 +88,7 @@ resource "aws_route53_record" "writer_endpoit" {
   ttl     = "300"
   records = [aws_rds_cluster_instance.wordpress_cluster_instance_writer.endpoint]
 }
-resource "aws_route53_record" "readers" {
+resource "aws_route53_record" "readers_endpoint" {
   count = var.number_of_instances
   zone_id = var.zone_id
   name    = "reader${count.index + 1}.${var.domain_name}"
