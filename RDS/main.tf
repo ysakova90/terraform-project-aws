@@ -38,6 +38,8 @@ resource "aws_security_group" "RDS_allow_rule" {
   tags = var.tags
 }
 
+#=============================================================DB Create ================================
+
 resource "aws_rds_cluster" "wordpress_db_cluster" {
   cluster_identifier   = "wordpress-cluster"
   engine               = var.engine
@@ -74,6 +76,8 @@ resource "aws_rds_cluster_instance" "wordpress_cluster_instance_readers" {
 
   depends_on = [aws_rds_cluster_instance.wordpress_cluster_instance_writer]
 }
+
+#=========================================================================================
 
 resource "aws_route53_record" "writer_endpoit" {
   zone_id = var.zone_id

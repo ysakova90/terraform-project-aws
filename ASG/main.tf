@@ -7,6 +7,7 @@ data "terraform_remote_state" "backend" {
   }
 }
 
+#========= EC2 SG ===========
 
  resource "aws_security_group" "ec2-sg" {
   name        = "project-team"
@@ -86,12 +87,12 @@ module "asg" {
   launch_template_name        = "project-asg"
   launch_template_description = "Launch template example"
   update_default_version      = true
-  user_data                   = filebase64("user_data.sh")
+  user_data                   =  filebase64("${path.module}/user_data.sh")
   image_id        = data.aws_ami.amazon.id
   instance_type     = "t3.micro"
   ebs_optimized     = false
   enable_monitoring = false
-  target_group_arns           = module.alb.target_group_arns
+  target_group_arns = module.alb.target_group_arns
   security_groups = [
     aws_security_group.ec2-sg.id
   ]
@@ -102,7 +103,7 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 8.0"
 
-  name                             = "my-alb"
+  name   = "my-alb"
 
   load_balancer_type = "application"
 
@@ -165,21 +166,13 @@ resource "aws_security_group" "alb-sg" {
   }
 }
 
-data "aws_route53_zone" "my_zone" {
-  name         = var.domain_name
-  private_zone = false
+
+resource "aws_route53_record" "wordpress" {
+  zone_id = var.zone_id
+  name    = "wordpress.${var.domain_name}"
+  type    = "CNAME"
+  ttl     = "300"
+  records = [module.alb.lb_dns_name]
 }
 
 
-
-resource "aws_route53_record" "alias_route53_record" {
-  zone_id = data.aws_route53_zone.my_zone.zone_id
-  name    = "wordpress.${var.domain_name}" # Replace with your name/domain/subdomain
-  type    = "A"
-
-  alias {
-    name                   = module.alb.lb_dns_name
-    zone_id                = module.alb.lb_zone_id
-    evaluate_target_health = true
-  }
-}
