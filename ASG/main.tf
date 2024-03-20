@@ -77,11 +77,9 @@ module "asg" {
   desired_capacity          = 3
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
-  vpc_zone_identifier       = [
-    data.terraform_remote_state.backend.outputs.private_subnet1,
-      data.terraform_remote_state.backend.outputs.private_subnet2,
-      data.terraform_remote_state.backend.outputs.private_subnet3
-  ]
+  vpc_zone_identifier       = data.terraform_remote_state.backend.outputs.private_subnets
+     
+  
   depends_on = [module.alb]
   # Launch template
   launch_template_name        = "project-asg"
@@ -108,11 +106,9 @@ module "alb" {
   load_balancer_type = "application"
 
   vpc_id          = data.terraform_remote_state.backend.outputs.vpc_id
-  subnets         = [
-     data.terraform_remote_state.backend.outputs.public_subnet1,
-     data.terraform_remote_state.backend.outputs.public_subnet2,
-     data.terraform_remote_state.backend.outputs.public_subnet3
-  ]
+  subnets         = data.terraform_remote_state.backend.outputs.public_subnets
+    
+  
   security_groups = [aws_security_group.alb-sg.id]
 
 
@@ -164,16 +160,23 @@ resource "aws_security_group" "alb-sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+}
+data "aws_route53_zone" "my_zone" {
+  name         = var.domain_name
+  private_zone = false
 }
 
 
-resource "aws_route53_record" "wordpress" {
-  zone_id = var.zone_id
-  name    = "wordpress.${var.domain_name}"
-  type    = "CNAME"
-  ttl     = "300"
-  records = [module.alb.lb_dns_name]
+
+resource "aws_route53_record" "alias_route53_record" {
+  zone_id = data.aws_route53_zone.my_zone.zone_id
+  name    = "wordpress.${var.domain_name}" 
+  type    = "A"
+
+  alias {
+    name                   = module.alb.lb_dns_name
+    zone_id                = module.alb.lb_zone_id
+    evaluate_target_health = true
+  }
 }
-
-
-0
