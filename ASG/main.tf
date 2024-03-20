@@ -7,10 +7,10 @@ data "terraform_remote_state" "backend" {
   }
 }
 
-#========= EC2 SG ===========
+#=========  SG ===========
 
-resource "aws_security_group" "ec2-sg" {
-  name        = "project-team"
+resource "aws_security_group" "my_sg" {
+  name        = "my_sg"
   description = "EC2 Instance Security Group"
   vpc_id      = data.terraform_remote_state.backend.outputs.vpc_id
 
@@ -45,7 +45,6 @@ resource "aws_security_group" "ec2-sg" {
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
   }
   tags = var.tags
 }
@@ -80,7 +79,6 @@ module "asg" {
   vpc_zone_identifier       = data.terraform_remote_state.backend.outputs.private_subnets
 
 
-  depends_on = [module.alb]
   # Launch template
   launch_template_name        = "project-asg"
   launch_template_description = "Launch template example"
@@ -90,78 +88,44 @@ module "asg" {
   instance_type               = "t3.micro"
   ebs_optimized               = false
   enable_monitoring           = false
-  target_group_arns           = module.alb.target_group_arns
   security_groups = [
-    aws_security_group.ec2-sg.id
+    aws_security_group.my_sg.id
   ]
 }
-
-
-module "alb" {
-  source  = "terraform-aws-modules/alb/aws"
-  version = "~> 8.0"
-
-  name = "my-alb"
-
+resource "aws_alb" "application-lb" {
+  name               = "project-alb"
+  internal           = false
+  ip_address_type    = "ipv4"
   load_balancer_type = "application"
-
-  vpc_id  = data.terraform_remote_state.backend.outputs.vpc_id
-  subnets = data.terraform_remote_state.backend.outputs.public_subnets
-
-
-  security_groups = [aws_security_group.alb-sg.id]
-
-
-  target_groups = [
-    {
-      name_prefix      = "app-"
-      backend_protocol = "HTTP"
-      backend_port     = 80
-      target_type      = "instance"
-    }
-  ]
-
-  http_tcp_listeners = [
-    {
-      port               = 80
-      protocol           = "HTTP"
-      target_group_index = 0
-    }
-  ]
-
-  tags = var.tags
+  security_groups    = [aws_security_group.my_sg.id]
+  subnets            =  data.terraform_remote_state.backend.outputs.public_subnets
 }
-# ALB Security Group
-resource "aws_security_group" "alb-sg" {
-  description = "ALB Security Group"
+
+# Target group
+resource "aws_alb_target_group" "project-tg" {
+
+  name        = "project-tg"
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "instance"
   vpc_id      = data.terraform_remote_state.backend.outputs.vpc_id
 
 
-  # Allow HTTP/HTTPS from ALL
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Allow HTTP/HTTPS from ALL
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Allow All Outbound
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
 }
+
+# Creating Listener
+resource "aws_alb_listener" "alb-listener" {
+  load_balancer_arn = aws_alb.application-lb.arn
+  port              = 80
+  protocol          = "HTTP"
+  default_action {
+    target_group_arn = aws_alb_target_group.project-tg.arn
+    type             = "forward"
+  }
+}
+ 
+
+
 data "aws_route53_zone" "my_zone" {
   name         = var.domain_name
   private_zone = false
@@ -175,8 +139,8 @@ resource "aws_route53_record" "alias_route53_record" {
   type    = "A"
 
   alias {
-    name                   = module.alb.lb_dns_name
-    zone_id                = module.alb.lb_zone_id
+    name                   = aws_alb.application-lb.dns_name
+    zone_id                = aws_alb.application-lb.zone_id
     evaluate_target_health = true
   }
 }
