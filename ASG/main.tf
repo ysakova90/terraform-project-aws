@@ -1,18 +1,18 @@
 data "terraform_remote_state" "backend" {
   backend = "s3"
-   config  = {
+  config = {
     bucket = "team1-aws-storage"
-    key = "vpc-statefile"
+    key    = "vpc-statefile"
     region = "us-east-1"
   }
 }
 
 #========= EC2 SG ===========
 
- resource "aws_security_group" "ec2-sg" {
+resource "aws_security_group" "ec2-sg" {
   name        = "project-team"
   description = "EC2 Instance Security Group"
-  vpc_id      =   data.terraform_remote_state.backend.outputs.vpc_id
+  vpc_id      = data.terraform_remote_state.backend.outputs.vpc_id
 
 
   ingress {
@@ -47,7 +47,7 @@ data "terraform_remote_state" "backend" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
-    tags = var.tags
+  tags = var.tags
 }
 
 # Pulls AMI information
@@ -71,26 +71,26 @@ module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "6.5.3"
   # Autoscaling group
-  name = "project-asg"
+  name                      = "project-asg"
   min_size                  = 1
   max_size                  = 99
   desired_capacity          = 3
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
   vpc_zone_identifier       = data.terraform_remote_state.backend.outputs.private_subnets
-     
-  
+
+
   depends_on = [module.alb]
   # Launch template
   launch_template_name        = "project-asg"
   launch_template_description = "Launch template example"
   update_default_version      = true
-  user_data                   =  filebase64("${path.module}/user_data.sh")
-  image_id        = data.aws_ami.amazon.id
-  instance_type     = "t3.micro"
-  ebs_optimized     = false
-  enable_monitoring = false
-  target_group_arns = module.alb.target_group_arns
+  user_data                   = filebase64("${path.module}/user_data.sh")
+  image_id                    = data.aws_ami.amazon.id
+  instance_type               = "t3.micro"
+  ebs_optimized               = false
+  enable_monitoring           = false
+  target_group_arns           = module.alb.target_group_arns
   security_groups = [
     aws_security_group.ec2-sg.id
   ]
@@ -101,14 +101,14 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 8.0"
 
-  name   = "my-alb"
+  name = "my-alb"
 
   load_balancer_type = "application"
 
-  vpc_id          = data.terraform_remote_state.backend.outputs.vpc_id
-  subnets         = data.terraform_remote_state.backend.outputs.public_subnets
-    
-  
+  vpc_id  = data.terraform_remote_state.backend.outputs.vpc_id
+  subnets = data.terraform_remote_state.backend.outputs.public_subnets
+
+
   security_groups = [aws_security_group.alb-sg.id]
 
 
@@ -171,7 +171,7 @@ data "aws_route53_zone" "my_zone" {
 
 resource "aws_route53_record" "alias_route53_record" {
   zone_id = data.aws_route53_zone.my_zone.zone_id
-  name    = "wordpress.${var.domain_name}" 
+  name    = "wordpress.${var.domain_name}"
   type    = "A"
 
   alias {
