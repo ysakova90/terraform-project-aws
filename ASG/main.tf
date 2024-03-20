@@ -176,3 +176,4 @@ resource "aws_route53_record" "wordpress" {
 }
 
 
+0

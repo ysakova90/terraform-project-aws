@@ -3,64 +3,38 @@ variable "region" {
   type        = string
   default     = ""
 }
-variable "cidr_block" {
-  description = "Please provide a cidr block"
+
+# VPC CIDR Block
+variable "cidr" {
+  description = "VPC CIDR Block"
   type        = string
-  default     = ""
+  default     = "10.0.0.0/16"
 }
-variable "instance_tenancy" {
-  description = "please provide instance_tenancy information"
-  type        = string
-  default     = ""
+
+# VPC Availability Zones
+variable "azs" {
+  description = "A list of availability zones names or ids in the region"
+  type        = list(string)
+  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
+
+# VPC Public Subnets
+variable "public_subnets" {
+  description = "A list of public subnets inside the VPC"
+  type        = list(string)
+  default     = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+}
+
+# VPC Private Subnets
+variable "private_subnets" {
+  description = "A list of private subnets inside the VPC"
+  type        = list(string)
+  default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+}
+
+
 variable "tags" {
   description = "Please specify tags"
   type        = map(any)
   default     = {}
-}
-variable "public_subnet1" {
-  description = "Please provide cidr block for subnet1"
-  type        = string
-  default     = ""
-}
-variable "public_subnet2" {
-  description = "Please provide cidr block for subnet2"
-  type        = string
-  default     = ""
-}
-variable "public_subnet3" {
-  description = "Please provide cidr block for subnet3"
-  type        = string
-  default     = ""
-}
-variable "private_subnet1" {
-  description = "Please provide cidr block for subnet1"
-  type        = string
-  default     = ""
-}
-variable "private_subnet2" {
-  description = "Please provide cidr block for subnet2"
-  type        = string
-  default     = ""
-}
-variable "private_subnet3" {
-  description = "Please provide cidr block for subnet3"
-  type        = string
-  default     = ""
-}
-
-variable "az1" {
-  description = "Please provide cidr block for subnet1"
-  type        = string
-  default     = ""
-}
-variable "az2" {
-  description = "Please provide cidr block for subnet2"
-  type        = string
-  default     = ""
-}
-variable "az3" {
-  description = "Please provide cidr block for subnet3"
-  type        = string
-  default     = ""
 }

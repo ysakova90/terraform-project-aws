@@ -1,21 +1,10 @@
 output "vpc_id" {
-  value = aws_vpc.main.id
+  value = module.vpc.vpc_id
 }
-output "public_subnet1" {
-  value = aws_subnet.public_subnet1.id
+output "public_subnets" {
+  value = module.vpc.public_subnets
 }
-output "public_subnet2" {
-  value = aws_subnet.public_subnet2.id
-}
-output "public_subnet3" {
-  value = aws_subnet.public_subnet3.id
-}
-output "private_subnet1" {
-  value = aws_subnet.public_subnet1.id
-}
-output "private_subnet2" {
-  value = aws_subnet.public_subnet2.id
-}
-output "private_subnet3" {
-  value = aws_subnet.public_subnet3.id
-}
+
+output "private_subnets" {
+  value = module.vpc.private_subnets
+  }
