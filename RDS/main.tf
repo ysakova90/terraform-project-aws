@@ -46,7 +46,7 @@ resource "aws_rds_cluster" "wordpress_db_cluster" {
   master_password        = var.master_password
 
   skip_final_snapshot     = true
-  db_subnet_group_name    = aws_db_subnet_group.RDS_subnet_grp.name
+  db_subnet_group_name    = aws_db_subnet_group.RDS_subnet_grp.id
   vpc_security_group_ids  = ["${aws_security_group.RDS_allow_rule.id}"]
   backup_retention_period = 5
   storage_encrypted       = true

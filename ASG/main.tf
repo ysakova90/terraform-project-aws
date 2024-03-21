@@ -76,18 +76,22 @@ module "asg" {
   desired_capacity          = 3
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
-  vpc_zone_identifier       = data.terraform_remote_state.backend.outputs.private_subnets
-
+  vpc_zone_identifier       = data.terraform_remote_state.backend.outputs.public_subnets
+  
 
   # Launch template
   launch_template_name        = "project-asg"
   launch_template_description = "Launch template example"
   update_default_version      = true
   user_data                   = filebase64("${path.module}/user_data.sh")
+    
+  
+
   image_id                    = data.aws_ami.amazon.id
   instance_type               = "t3.micro"
   ebs_optimized               = false
   enable_monitoring           = false
+  target_group_arns = [aws_alb_target_group.project-tg.id]
   security_groups = [
     aws_security_group.my_sg.id
   ]
