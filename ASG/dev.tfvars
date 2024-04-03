@@ -1,5 +1,5 @@
-domain_name = "ysakova.com"
-zone_id     = "Z03752632UEAH78FQT19U"
+domain_name = "www.com"
+zone_id     = ""
 tags = {
 
   Name      = "Terraform-project"
